@@ -10,6 +10,8 @@ def process_room_number(method,n,m):
         return m*(n+1)
     elif method == 3: #add inf demon on inf bus
         return int(((n + m-1) * (n + m)) / 2 + m)
+    elif method == 4: # shift only room after n
+        return m+1 if m>=n else m
     else:
         return m
     

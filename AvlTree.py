@@ -52,7 +52,7 @@ class AVLTree:
 
         return node 
     
-    
+
 
     def get_all(self):
         return self._get_all(self.root)

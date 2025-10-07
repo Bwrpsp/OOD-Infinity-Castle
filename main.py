@@ -2,14 +2,13 @@ from AvlTree import AVLTree
 from primegen import SieveOfEratosthenes,get_prime_nth,primenth
 from room import process_room_number
 from demon import generate_demon_id
-import os
 import time
-from ascii import muzan,logo
+from ascii import muzan,logo,clear
 
-os.system("cls")
+clear()
 logo()
 initial = int(input("\nPlease enter the initial demons amount : "))
-os.system('cls')
+clear()
 muzan()
 logo()
 print("\n======Building Castle======\n")
@@ -17,10 +16,9 @@ castle = AVLTree()
 for i in range(initial):
     castle.insertRoom((i+1,generate_demon_id(0,0,i+1)))
 
-time.sleep(1)
 print("\n=====Finish Building=====")
 time.sleep(0.2)
-os.system("cls")
+clear()
 
 
 def help():
@@ -31,7 +29,6 @@ def help():
     print("2 Add demon(s)")
     print("3 Remove demon")
     print("4 search demon by room number")
-    print("5 search room number of demon's id")
     print("\nHelp if you forget the key")
     print("quit if you want to exit program (all data would be lost)\n")
 
@@ -40,7 +37,7 @@ def help():
 
 help()
 key = input("\nplease enter you command to Nakime : ")
-os.system('cls')
+clear()
 lot = 1
 while(1):
     helped = False
@@ -48,7 +45,7 @@ while(1):
         logo()
         print("\n==== Fetching data ====\n")
         lst = castle.get_all()
-        os.system("cls")
+        clear()
 
 
         logo()
@@ -57,7 +54,7 @@ while(1):
             print(f"Room: {demon.num}           Demon's ID : {demon.demon}")
         
         tmp = input("\nPress enter to continue : ")
-        os.system("cls")
+        clear()
 
 
     elif key=='2':
@@ -67,9 +64,10 @@ while(1):
         print("2 : adding inf demons")
         print("3 : adding inf demons on n bus(es)")
         print("4 : adding inf demons on inf buses")
+        print("5 : adding demon manually (assigned room number)")
 
         method = int(input("\nEnter input : "))
-        os.system("cls")
+        clear()
 
         if method == 1:
             logo()
@@ -84,7 +82,7 @@ while(1):
             lot+=1
             print("\nAdding done!!")
             cont = input("\nEnter to continue  : ")
-            os.system("cls")
+            clear()
             
 
         elif method == 2:
@@ -100,7 +98,7 @@ while(1):
             lot+=1
             print("\nAdding done!!")
             cont = input("\nEnter to continue  : ")
-            os.system("cls")
+            clear()
 
 
         elif method == 3:
@@ -118,7 +116,7 @@ while(1):
             lot+=1
             print("\nAdding done!!")
             cont = input("\nEnter to continue  : ")
-            os.system("cls")
+            clear()
         elif method == 4:
             logo()
             bus = int(input("Enter amount of bus (inf): "))
@@ -134,12 +132,25 @@ while(1):
             lot+=1
             print("\nAdding done!!")
             cont = input("\nEnter to continue  : ")
-            os.system("cls")
+            clear()
+        elif method == 5:
+            logo()
+            n = int(input("Enter room number : "))
+
+            print("\nAdding demon . . .")
+
+            castle.move_room(4,n)
+            castle.insertRoom((n,generate_demon_id(lot,5,1)))
+
+            lot+=1
+            print("\nAdding done!!")
+            cont = input("\nEnter to continue  : ")
+            clear()
         else:
             logo()
             print("!!! Wrong command !!!")
             cont = input("\nEnter to continue  : ")
-            os.system("cls")
+            clear()
 
 
 
@@ -164,4 +175,4 @@ while(1):
     if not helped:
         logo()
     key = input("\nplease enter you command to Nakime : ")
-    os.system('cls')
+    clear()
