@@ -160,7 +160,7 @@ while(1):
         removed = castle.removeRoom(n)
 
         if removed:
-            print(f"Success fully remove room {removed.num}. The demon inside is { removed.demon}")
+            print(f"Success fully remove room {removed.num}. The demon inside is {removed.demon}")
         else:
             print("Error : Room not found!!")
         
@@ -168,7 +168,17 @@ while(1):
         clear()
  
     elif key=='4':
-        pass
+        logo()
+        n = int(input("Enter room number to be search : "))
+        search = castle.search(n)
+
+        if search:
+            print(f"Found room {search.num}. The demon inside is {search.demon}")
+        else:
+            print("Error : Room not found!!")
+        
+        cont = input("\nEnter to continue  : ")
+        clear()
 
     elif key.lower()=='quit':
         logo()
