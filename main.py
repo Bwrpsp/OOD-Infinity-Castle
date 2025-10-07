@@ -155,7 +155,18 @@ while(1):
 
 
     elif key=='3':
-        pass
+        logo()
+        n = int(input("Enter room number to be remove : "))
+        removed = castle.removeRoom(n)
+
+        if removed:
+            print(f"Success fully remove room {removed.num}. The demon inside is { removed.demon}")
+        else:
+            print("Error : Room not found!!")
+        
+        cont = input("\nEnter to continue  : ")
+        clear()
+ 
     elif key=='4':
         pass
 

@@ -52,6 +52,34 @@ class AVLTree:
 
         return node 
     
+    def removeRoom(self, roomNumber):
+        self.root, removed = self._remove(self.root, roomNumber)
+        return removed
+
+    def _remove(self, node, roomNumber):
+        if not node:
+            return node, None  
+
+        if roomNumber < node.data.num:
+            node.left, removed = self._remove(node.left, roomNumber)
+        elif roomNumber > node.data.num:
+            node.right, removed = self._remove(node.right, roomNumber)
+        else:
+            removed = node.data  
+            
+            if not node.left:
+                return node.right, removed
+            elif not node.right:
+                return node.left, removed
+
+            successor = node.right
+            while successor.left:
+                successor = successor.left
+
+            node.data = successor.data
+            node.right, _ = self._remove(node.right, successor.data.num)
+
+        return node, removed
 
 
     def get_all(self):
