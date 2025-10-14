@@ -3,9 +3,11 @@ from room import Room,process_room_number
 class AVLTree:
     def __init__(self):
         self.root = None
+        self.size = 0
 
     def insertRoom(self, room):  
         self.root = self._insert(self.root, room)
+        self.size += 1
 
     def _insert(self, node, room):
         if node is None:
@@ -57,21 +59,36 @@ class AVLTree:
         node.setHeight()
         return node
 
-    def move_room(self, method, n=0):
-        if not self.root:
-            return
-        stack = [self.root]
-        while stack:
-            node = stack.pop()
-            node.data.num = process_room_number(method, n, node.data.num)
-            if node.left:
-                stack.append(node.left)
-            if node.right:
-                stack.append(node.right)
-        return self.root
+    # def move_room(self, method, n=0):
+    #     if not self.root:
+    #         return
+    #     stack = [self.root]
+    #     while stack:
+    #         node = stack.pop()
+    #         node.data.num = process_room_number(method, n, node.data.num)
+    #         if node.left:
+    #             stack.append(node.left)
+    #         if node.right:
+    #             stack.append(node.right)
+    #     return self.root
+
+    def move_room(self,old_room,new_room,lot):
+        node = self.root
+        #print("hhafadf")
+        while node:
+            print(node.data.num)
+            if node.data.num == old_room and node.data.extract_lot() < lot:
+                #print("move complete")
+                node.data.num = new_room
+                return node.data
+            node = node.left if old_room < node.data.num else node.right
+        return None
     
     def removeRoom(self, roomNumber):
         self.root, removed = self._remove(self.root, roomNumber)
+        if removed:
+            self.size -= 1
+
         return removed
 
     def _remove(self, node, roomNumber):

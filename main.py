@@ -93,10 +93,14 @@ while(1):
                 n = int(input("Enter amount of demon : "))
 
                 print("\nAdding demon . . .")
-
-                castle.move_room(1,n)
-                for i in tqdm(range(n)):
-                    castle.insertRoom((i+1,generate_demon_id(lot,1,i+1)))
+                print(castle.size)
+                for i in tqdm(range(n + castle.size)):
+                    if i < n:
+                        print(f"insert room {i+1}")
+                        castle.insertRoom((i+1,generate_demon_id(lot,1,i+1)))
+                    else:
+                        print(f"move room {i-n+1} to {i+1}")
+                        castle.move_room(i-n+1,i+1,lot)
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -114,7 +118,6 @@ while(1):
 
                 print("\nAdding demon . . .")
 
-                castle.move_room(2,1)
                 for i in tqdm(range(n)):
                     castle.insertRoom((i*2+1,generate_demon_id(lot,2,i+1)))
 
@@ -135,15 +138,18 @@ while(1):
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
-                
+                n.append(castle.size)
 
                 print("\nAdding demon . . .")
 
-                castle.move_room(2,bus)
-                # for i in tqdm(n):
-                for i in tqdm(range(bus)):
-                    for j in range(n[i]):
-                        castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
+                
+                for j in tqdm(range(max(n))):  
+                    for i in range(bus+1):  # +1 for old room
+                        if j < n[i]:   # not exceed amount per bus 
+                            if i == bus:  # old room
+                                castle.move_room(j+1,(j+1)*(bus+1),lot)
+                            else:
+                                castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -306,7 +312,7 @@ while(1):
             logo()
         key = input("\nplease enter you command to Nakime : ")
         clear()
-    except:
+    except KeyError as e:
         clear()
-        print("Something went wrong !!")
+        print("Something went wrong !!",e)
         key = ""
