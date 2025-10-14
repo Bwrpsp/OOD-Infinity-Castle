@@ -2,6 +2,10 @@ class Room():
     def __init__(self,num,demon):
         self.num = num
         self.demon = demon
+
+    def extract_lot(self):
+        lot = int(self.demon.split("-")[1][1:])
+        return lot
         
 def process_room_number(method,n,m):
     if method == 1:  #add n demon
