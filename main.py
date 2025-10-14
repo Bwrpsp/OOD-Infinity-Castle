@@ -134,9 +134,10 @@ while(1):
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
-                
-
-                print("\nAdding demon . . .")
+                if len(n) != bus:
+                    print("\nerror input don't match")
+                else:
+                    print("\nAdding demon . . .")
 
                 castle.tran.add_scale(bus+1)
                 # for i in tqdm(n):
@@ -145,10 +146,8 @@ while(1):
                         if j<n[i]:  
                             castle.insertRoom((castle.tran.full_inverse((j*(bus+1))+i+1),generate_demon_id(lot,3,j+1,i+1)))
 
-                lot+=1
-                metric = tracker.end_tracking(tracking)
-                print("\nAdding done!!")
-                print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
+                    lot+=1
+                    print("\nAdding done!!")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
@@ -161,9 +160,12 @@ while(1):
                 bus = int(input("Enter amount of bus (inf): "))
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
+                
+                if len(n) != bus:
+                    print("\nerror input don't match")
+                else:
+                    print("\nAdding demon . . .")
                 n.insert(0,castle.size)
-                print("\nAdding demon . . .")
-
                 old_castle = AVLTree(castle.root,castle.size)
                 castle.reset_tree()
 
