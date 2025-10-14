@@ -114,7 +114,7 @@ class AVLTree:
 
 
     def get_all(self):
-        result = []
+        # result = []
         stack = []
         node = self.root
         while stack or node:
@@ -123,9 +123,11 @@ class AVLTree:
                 node = node.left
             else:
                 node = stack.pop()
-                result.append(node.data)
+                print(f"Room: {node.data.num}           Demon's ID : {node.data.demon}")
+                # result.append(node.data)
                 node = node.right
-        return result
+        
+        return
     
     def search(self, room):
         node = self.root

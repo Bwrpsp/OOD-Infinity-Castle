@@ -55,14 +55,16 @@ while(1):
             
             logo()
             print("\n==== Fetching data ====\n")
-            lst = castle.get_all()
+            # lst = castle.get_all()
             clear()
 
 
             logo()
             print("\nAll demons in this castle are :\n\n")
-            for demon in lst:
-                print(f"Room: {demon.num}           Demon's ID : {demon.demon}")
+            castle.get_all()
+
+            # for demon in lst:
+            #     print(f"Room: {demon.num}           Demon's ID : {demon.demon}")
 
             metric = tracker.end_tracking(tracking)
             print(f"\n[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
