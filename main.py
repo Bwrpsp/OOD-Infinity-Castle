@@ -141,8 +141,10 @@ while(1):
 
                 print("\nAdding demon . . .")
 
-                castle.move_room(4,n)
-                castle.insertRoom((n,generate_demon_id(lot,5,1)))
+                if castle.search(n):
+                    print("This room is occupied !!!!")
+                else:
+                    castle.insertRoom((n,generate_demon_id(lot,5,1)))
 
                 lot+=1
                 print("\nAdding done!!")
