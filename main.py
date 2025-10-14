@@ -113,18 +113,19 @@ while(1):
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
-                
+                if len(n) != bus:
+                    print("\nerror input don't match")
+                else:
+                    print("\nAdding demon . . .")
 
-                print("\nAdding demon . . .")
+                    castle.move_room(2,bus)
+                    # for i in tqdm(n):
+                    for i in tqdm(range(bus)):
+                        for j in range(n[i]):
+                            castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
 
-                castle.move_room(2,bus)
-                # for i in tqdm(n):
-                for i in tqdm(range(bus)):
-                    for j in range(n[i]):
-                        castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
-
-                lot+=1
-                print("\nAdding done!!")
+                    lot+=1
+                    print("\nAdding done!!")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
@@ -137,15 +138,18 @@ while(1):
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
-                print("\nAdding demon . . .")
+                if len(n) != bus:
+                    print("\nerror input don't match")
+                else:
+                    print("\nAdding demon . . .")
 
-                castle.move_room(3)
-                for i in tqdm(range(bus)):
-                    for j in range(n[i]):
-                        castle.insertRoom((process_room_number(3,i+1,j+1),generate_demon_id(lot,4,j+1,i+1)))
+                    castle.move_room(3)
+                    for i in tqdm(range(bus)):
+                        for j in range(n[i]):
+                            castle.insertRoom((process_room_number(3,i+1,j+1),generate_demon_id(lot,4,j+1,i+1)))
 
-                lot+=1
-                print("\nAdding done!!")
+                    lot+=1
+                    print("\nAdding done!!")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
