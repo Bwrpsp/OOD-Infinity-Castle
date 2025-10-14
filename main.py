@@ -5,6 +5,8 @@ from demon import generate_demon_id
 import time
 from ascii import muzan,logo,clear
 from tqdm import tqdm
+from performance_tracker import PerformanceTracker
+from castle_export import export_castle_to_csv, import_castle_from_csv
 
 clear()
 logo()
@@ -21,6 +23,8 @@ print("\n=====Finish Building=====")
 time.sleep(0.2)
 clear()
 
+# Initialize performance tracker
+tracker = PerformanceTracker()
 
 def help():
     logo()
@@ -30,6 +34,9 @@ def help():
     print("2 Add demon(s)")
     print("3 Remove demon")
     print("4 search demon by room number")
+    print("5 Export castle data to CSV")
+    print("6 Export performance metrics to CSV")
+    print("7 View performance summary")
     print("\nHelp if you forget the key")
     print("quit if you want to exit program (all data would be lost)\n")
 
@@ -44,6 +51,8 @@ while(1):
     try:
         helped = False
         if key == '1':
+            tracking = tracker.start_tracking("Show all demons")
+            
             logo()
             print("\n==== Fetching data ====\n")
             # lst = castle.get_all()
@@ -57,6 +66,9 @@ while(1):
             # for demon in lst:
             #     print(f"Room: {demon.num}           Demon's ID : {demon.demon}")
 
+            metric = tracker.end_tracking(tracking)
+            print(f"\n[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
+            
             tmp = input("\nPress enter to continue : ")
             clear()
 
@@ -74,6 +86,8 @@ while(1):
             clear()
 
             if method == 1:
+                tracking = tracker.start_tracking("Add n demons")
+                
                 logo()
                 n = int(input("Enter amount of demon : "))
 
@@ -84,12 +98,16 @@ while(1):
                     castle.insertRoom((i+1,generate_demon_id(lot,1,i+1)))
 
                 lot+=1
+                metric = tracker.end_tracking(tracking)
                 print("\nAdding done!!")
+                print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
 
             elif method == 2:
+                tracking = tracker.start_tracking("Add inf demons")
+                
                 logo()
                 n = int(input("Enter amount of demon (inf) : "))
 
@@ -100,14 +118,17 @@ while(1):
                     castle.insertRoom((i*2+1,generate_demon_id(lot,2,i+1)))
 
                 lot+=1
+                metric = tracker.end_tracking(tracking)
                 print("\nAdding done!!")
+                print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
             # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             elif method == 3:
-
+                tracking = tracker.start_tracking("Add inf demons on n buses")
+                
                 logo()
                 bus = int(input("Enter amount of bus : "))
                 # n = int(input("Enter amount of demon (inf) : "))
@@ -132,7 +153,8 @@ while(1):
             # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             elif method == 4:
-
+                tracking = tracker.start_tracking("Add inf demons on inf buses")
+                
                 logo()
                 bus = int(input("Enter amount of bus (inf): "))
                 # n = int(input("Enter amount of demon (inf) : "))
@@ -148,24 +170,32 @@ while(1):
                         for j in range(n[i]):
                             castle.insertRoom((process_room_number(3,i+1,j+1),generate_demon_id(lot,4,j+1,i+1)))
 
-                    lot+=1
-                    print("\nAdding done!!")
+                lot+=1
+                metric = tracker.end_tracking(tracking)
+                print("\nAdding done!!")
+                print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
             # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             elif method == 5:
+                tracking = tracker.start_tracking("Add demon manually")
+                
                 logo()
                 n = int(input("Enter room number : "))
 
                 print("\nAdding demon . . .")
 
-                castle.move_room(4,n)
-                castle.insertRoom((n,generate_demon_id(lot,5,1)))
+                if castle.search(n):
+                    print("This room is occupied !!!!")
+                else:
+                    castle.insertRoom((n,generate_demon_id(lot,5,1)))
 
                 lot+=1
+                metric = tracker.end_tracking(tracking)
                 print("\nAdding done!!")
+                print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
             else:
@@ -177,6 +207,8 @@ while(1):
 
 
         elif key=='3':
+            tracking = tracker.start_tracking("Remove demon")
+            
             logo()
             n = int(input("Enter room number to be remove : "))
             removed = castle.removeRoom(n)
@@ -186,10 +218,15 @@ while(1):
             else:
                 print("Error : Room not found!!")
 
+            metric = tracker.end_tracking(tracking)
+            print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
+            
             cont = input("\nEnter to continue  : ")
             clear()
     
         elif key=='4':
+            tracking = tracker.start_tracking("Search demon")
+            
             logo()
             n = int(input("Enter room number to be search : "))
             search = castle.search(n)
@@ -199,7 +236,56 @@ while(1):
             else:
                 print("Error : Room not found!!")
 
+            metric = tracker.end_tracking(tracking)
+            print(f"[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
+            
             cont = input("\nEnter to continue  : ")
+            clear()
+
+        elif key=='5':
+            tracking = tracker.start_tracking("Export castle to CSV")
+            
+            logo()
+            success, result = export_castle_to_csv(castle)
+            
+            if success:
+                print(f"\n✓ Castle data exported successfully!")
+                print(f"File saved as: {result}")
+                print(f"Total rooms exported: {len(castle.get_all())}")
+            else:
+                print(f"\n✗ Export failed: {result}")
+            
+            metric = tracker.end_tracking(tracking)
+            print(f"[Performance] Time: {metric['execution_time']}s")
+            
+            cont = input("\nPress enter to continue : ")
+            clear()
+        
+        elif key=='6':
+            logo()
+            success, result = tracker.export_to_csv()
+            
+            if success:
+                print(f"\n✓ Performance metrics exported successfully!")
+                print(f"File saved as: {result}")
+            else:
+                print(f"\n✗ Export failed: {result}")
+            
+            cont = input("\nPress enter to continue : ")
+            clear()
+        
+        elif key=='7':
+            logo()
+            print(tracker.get_summary())
+            
+            if tracker.metrics:
+                print("\nRecent Commands:")
+                print(f"{'Command':<30} {'Time (s)':<12} {'RAM Change (MB)':<15}")
+                print("-" * 60)
+                for metric in tracker.metrics[-10:]:  # Show last 10
+                    print(f"{metric['command']:<30} {metric['execution_time']:<12.4f} {metric['ram_change_mb']:+15.2f}")
+            
+            cont = input("\nPress enter to continue : ")
             clear()
 
         elif key.lower()=='quit':
