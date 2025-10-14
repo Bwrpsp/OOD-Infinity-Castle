@@ -12,16 +12,15 @@ class Transfrom:
         self.forward.append(lambda x: x*n)
         self.inverse.append(lambda x: x/n) 
 
-    def add_cantor(self):
-        self.forward.append(lambda x: x*(x+1)/2)
-        self.inverse.append(lambda x: x - (((math.sqrt(8*x+1))-1/2)*((math.sqrt(8*x+1))-1/2)/2)-1) 
-
     def full_forward(self,n):
         for f in self.forward:
             n = f(n)
-        return n
+        return int(round(n))
 
     def full_inverse(self,n):
-        for f in self.inverse:
+        for f in reversed(self.inverse):
             n = f(n)
         return n
+    def reset(self):
+        self.forward = []
+        self.inverse = []

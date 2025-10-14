@@ -1,7 +1,12 @@
 from room import Room,process_room_number
-
+from tranfrom import Transfrom
 class AVLTree:
-    def __init__(self):
+    def __init__(self,root = None,size = 0):
+        self.root = root
+        self.size = size
+        self.tran = Transfrom()
+
+    def reset_tree(self):
         self.root = None
         self.size = 0
 
@@ -85,7 +90,9 @@ class AVLTree:
         return None
     
     def removeRoom(self, roomNumber):
-        self.root, removed = self._remove(self.root, roomNumber)
+        node_num = self.tran.full_inverse(roomNumber)
+
+        self.root, removed = self._remove(self.root, node_num)
         if removed:
             self.size -= 1
 
@@ -140,19 +147,40 @@ class AVLTree:
                 node = node.left
             else:
                 node = stack.pop()
-                print(f"Room: {node.data.num}           Demon's ID : {node.data.demon}")
+                print(f"Room: {self.tran.full_forward(node.data.num)}           Demon's ID : {node.data.demon}")
                 # result.append(node.data)
                 node = node.right
         
         return
     
     def search(self, room):
+        node_num = self.tran.full_inverse(room)
+
+
         node = self.root
         while node:
-            if node.data.num == room:
+            if node.data.num == node_num:
                 return node.data
-            node = node.left if room < node.data.num else node.right
+            node = node.left if node_num < node.data.num else node.right
         return None
+
+    def pop_min(self):
+        if self.root is None:
+            return None
+
+        parent = None
+        node = self.root
+        while node.left:
+            parent = node
+            node = node.left
+
+        # remove node
+        if parent:
+            parent.left = node.right
+        else:
+            self.root = node.right
+
+        return node
 
 
 class Node:

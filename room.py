@@ -5,7 +5,6 @@ class Room():
 
     def extract_lot(self):
         lot = int(self.demon.split("-")[1][1:])
-        print(lot)
         return lot
         
 def process_room_number(method,n,m):

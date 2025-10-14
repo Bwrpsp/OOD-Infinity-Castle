@@ -7,7 +7,6 @@ from ascii import muzan,logo,clear
 from tqdm import tqdm
 from performance_tracker import PerformanceTracker
 from castle_export import export_castle_to_csv, import_castle_from_csv
-from tranfrom import Transfrom
 
 clear()
 logo()
@@ -65,7 +64,7 @@ while(1):
             castle.get_all()
 
             # for demon in lst:
-            #     print(f"Room: {demon.num}            Demon's ID : {demon.demon}")
+            #     print(f"Room: {demon.num}             Demon's ID : {demon.demon}")
 
             metric = tracker.end_tracking(tracking)
             print(f"\n[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
@@ -93,14 +92,10 @@ while(1):
                 n = int(input("Enter amount of demon : "))
 
                 print("\nAdding demon . . .")
-                print(castle.size)
-                for i in tqdm(range(n + castle.size)):
-                    if i < n:
-                        print(f"insert room {i+1}")
-                        castle.insertRoom((i+1,generate_demon_id(lot,1,i+1)))
-                    else:
-                        print(f"move room {i-n+1} to {i+1}")
-                        castle.move_room(i-n+1,i+1,lot)
+
+                castle.tran.add_shift(n)
+                for i in tqdm(range(n)):
+                    castle.insertRoom((castle.tran.full_inverse(i+1),generate_demon_id(lot,1,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -118,8 +113,9 @@ while(1):
 
                 print("\nAdding demon . . .")
 
+                castle.tran.add_scale(2)
                 for i in tqdm(range(n)):
-                    castle.insertRoom((i*2+1,generate_demon_id(lot,2,i+1)))
+                    castle.insertRoom((castle.tran.full_inverse(i*2+1),generate_demon_id(lot,2,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -138,18 +134,16 @@ while(1):
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
-                n.append(castle.size)
+                
 
                 print("\nAdding demon . . .")
 
-                
-                for j in tqdm(range(max(n))):  
-                    for i in range(bus+1):  # +1 for old room
-                        if j < n[i]:   # not exceed amount per bus 
-                            if i == bus:  # old room
-                                castle.move_room(j+1,(j+1)*(bus+1),lot)
-                            else:
-                                castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
+                castle.tran.add_scale(bus+1)
+                # for i in tqdm(n):
+                for j in range(max(n)):
+                    for i in range(bus):
+                        if j<n[i]:  
+                            castle.insertRoom((castle.tran.full_inverse((j*(bus+1))+i+1),generate_demon_id(lot,3,j+1,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -167,14 +161,30 @@ while(1):
                 bus = int(input("Enter amount of bus (inf): "))
                 # n = int(input("Enter amount of demon (inf) : "))
                 n = list(map(int,input('Enter amount of demon (inf) : ').split()))
-
+                n.insert(0,castle.size)
                 print("\nAdding demon . . .")
 
-                castle.move_room(3)
-                for i in tqdm(range(bus)):
-                    for j in range(n[i]):
-                        castle.insertRoom((process_room_number(3,i+1,j+1),generate_demon_id(lot,4,j+1,i+1)))
+                old_castle = AVLTree(castle.root,castle.size)
+                castle.reset_tree()
 
+                for diag in range(bus + max(n)):
+                    for i in range(diag + 1):
+                        j = diag - i
+                        if i <= bus and j < max(n):
+                            #print(f"{i} {j}")
+                            if i==0: # old people in hotel
+                                node = old_castle.pop_min()   # get least node (and remove it)
+                                if node is None:
+                                    break  # no more old rooms
+                                old_room = castle.tran.full_forward(node.data.num)
+                                castle.insertRoom((
+                                    process_room_number(3, i, old_room),
+                                    node.data.demon
+                                ))
+                            elif j<n[i]:  #new in buses
+                                castle.insertRoom((process_room_number(3,i,j+1),generate_demon_id(lot,4,j+1,i+1)))
+
+                castle.tran.reset()
                 lot+=1
                 metric = tracker.end_tracking(tracking)
                 print("\nAdding done!!")
@@ -219,7 +229,7 @@ while(1):
             removed = castle.removeRoom(n)
 
             if removed:
-                print(f"Success fully remove room {removed.num}. The demon inside is {removed.demon}")
+                print(f"Success fully remove room {castle.tran.full_forward(removed.num)}. The demon inside is {removed.demon}")
             else:
                 print("Error : Room not found!!")
 
@@ -237,7 +247,7 @@ while(1):
             search = castle.search(n)
 
             if search:
-                print(f"Found room {search.num}. The demon inside is {search.demon}")
+                print(f"Found room {castle.tran.full_forward(search.num)}. The demon inside is {search.demon}")
             else:
                 print("Error : Room not found!!")
 
@@ -301,7 +311,7 @@ while(1):
         elif key == "Muzan":
             muzan()
         elif key == "clear":
-            castle.root = None
+            castle.reset_tree()
         else:
             help()
             helped = True
@@ -312,7 +322,7 @@ while(1):
             logo()
         key = input("\nplease enter you command to Nakime : ")
         clear()
-    except KeyError as e:
+    except:
         clear()
-        print("Something went wrong !!",e)
+        print("Something went wrong !!")
         key = ""
