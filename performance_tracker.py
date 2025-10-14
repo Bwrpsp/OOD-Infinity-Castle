@@ -35,29 +35,7 @@ class PerformanceTracker:
         
         self.metrics.append(metric)
         return metric
-    
-    def export_to_csv(self, filename=None):
-        """Export all metrics to a CSV file"""
-        if not self.metrics:
-            return False, "No metrics to export"
-        
-        if filename is None:
-            filename = f"performance_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-        
-        try:
-            with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
-                fieldnames = ['timestamp', 'command', 'execution_time', 'start_ram_mb', 
-                             'end_ram_mb', 'ram_change_mb', 'peak_ram_mb']
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                
-                writer.writeheader()
-                for metric in self.metrics:
-                    writer.writerow(metric)
-            
-            return True, filename
-        except Exception as e:
-            return False, str(e)
-    
+       
     def get_summary(self):
         """Get a summary of all tracked metrics"""
         if not self.metrics:

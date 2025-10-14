@@ -122,20 +122,25 @@ while(1):
                 cont = input("\nEnter to continue  : ")
                 clear()
 
+            # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             elif method == 3:
                 tracking = tracker.start_tracking("Add inf demons on n buses")
                 
                 logo()
                 bus = int(input("Enter amount of bus : "))
-                n = int(input("Enter amount of demon (inf) : "))
+                # n = int(input("Enter amount of demon (inf) : "))
+                n = list(map(int,input('Enter amount of demon (inf) : ').split()))
+
+                
 
                 print("\nAdding demon . . .")
 
                 castle.move_room(2,bus)
-                for i in tqdm(range(n)):
-                    for j in range(bus):
-                        castle.insertRoom(((i*(bus+1))+j+1,generate_demon_id(lot,3,i+1,j+1)))
+                # for i in tqdm(n):
+                for i in tqdm(range(bus)):
+                    for j in range(n[i]):
+                        castle.insertRoom(((j*(bus+1))+i+1,generate_demon_id(lot,3,j+1,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -143,19 +148,23 @@ while(1):
                 print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
+
+            # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             elif method == 4:
                 tracking = tracker.start_tracking("Add inf demons on inf buses")
                 
                 logo()
                 bus = int(input("Enter amount of bus (inf): "))
-                n = int(input("Enter amount of demon (inf) : "))
+                # n = int(input("Enter amount of demon (inf) : "))
+                n = list(map(int,input('Enter amount of demon (inf) : ').split()))
 
                 print("\nAdding demon . . .")
 
                 castle.move_room(3)
-                for i in tqdm(range(n)):
-                    for j in range(bus):
-                        castle.insertRoom((process_room_number(3,j+1,i+1),generate_demon_id(lot,4,i+1,j+1)))
+                for i in tqdm(range(bus)):
+                    for j in range(n[i]):
+                        castle.insertRoom((process_room_number(3,i+1,j+1),generate_demon_id(lot,4,j+1,i+1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -163,6 +172,9 @@ while(1):
                 print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
                 cont = input("\nEnter to continue  : ")
                 clear()
+
+            # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             elif method == 5:
                 tracking = tracker.start_tracking("Add demon manually")
                 
@@ -171,8 +183,10 @@ while(1):
 
                 print("\nAdding demon . . .")
 
-                castle.move_room(4,n)
-                castle.insertRoom((n,generate_demon_id(lot,5,1)))
+                if castle.search(n):
+                    print("This room is occupied !!!!")
+                else:
+                    castle.insertRoom((n,generate_demon_id(lot,5,1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
