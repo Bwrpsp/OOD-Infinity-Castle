@@ -293,6 +293,8 @@ while(1):
                 break
         elif key == "Muzan":
             muzan()
+        elif key == "clear":
+            castle.root = None
         else:
             help()
             helped = True
