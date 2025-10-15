@@ -153,6 +153,22 @@ class AVLTree:
         
         return
     
+    def get_all_csv(self):
+        result = []
+        stack = []
+        node = self.root
+        while stack or node:
+            if node:
+                stack.append(node)
+                node = node.left
+            else:
+                node = stack.pop()
+                # print(f"Room: {self.tran.full_forward(node.data.num)}           Demon's ID : {node.data.demon}")
+                result.append(node.data)
+                node = node.right
+    
+        return result
+    
     def search(self, room):
         node_num = self.tran.full_inverse(room)
 

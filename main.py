@@ -6,7 +6,7 @@ import time
 from ascii import muzan,logo,clear
 from tqdm import tqdm
 from performance_tracker import PerformanceTracker
-from castle_export import export_castle_to_csv, import_castle_from_csv
+from castle_export import export_castle_to_csv
 
 clear()
 logo()
@@ -269,7 +269,7 @@ while(1):
             if success:
                 print(f"\n✓ Castle data exported successfully!")
                 print(f"File saved as: {result}")
-                print(f"Total rooms exported: {len(castle.get_all())}")
+                # print(f"Total rooms exported: {len(castle.get_all_csv())}")
             else:
                 print(f"\n✗ Export failed: {result}")
             
