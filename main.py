@@ -35,8 +35,7 @@ def help():
     print("3 Remove demon")
     print("4 search demon by room number")
     print("5 Export castle data to CSV")
-    print("6 Export performance metrics to CSV")
-    print("7 View performance summary")
+    print("6 View performance summary")
     print("\nHelp if you forget the key")
     print("quit if you want to exit program (all data would be lost)\n")
 
@@ -280,19 +279,6 @@ while(1):
             clear()
         
         elif key=='6':
-            logo()
-            success, result = tracker.export_to_csv()
-            
-            if success:
-                print(f"\n✓ Performance metrics exported successfully!")
-                print(f"File saved as: {result}")
-            else:
-                print(f"\n✗ Export failed: {result}")
-            
-            cont = input("\nPress enter to continue : ")
-            clear()
-        
-        elif key=='7':
             logo()
             print(tracker.get_summary())
             
