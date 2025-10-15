@@ -10,7 +10,6 @@ class PerformanceTracker:
         self.metrics = []
         
     def start_tracking(self, command_name):
-        """Start tracking performance for a command"""
         return {
             'command': command_name,
             'start_time': time.time(),
@@ -19,7 +18,6 @@ class PerformanceTracker:
         }
     
     def end_tracking(self, tracking_data):
-        """End tracking and record metrics"""
         end_time = time.time()
         end_ram = self.process.memory_info().rss / 1024 / 1024  # Convert to MB
         
@@ -37,7 +35,6 @@ class PerformanceTracker:
         return metric
     
     def export_to_csv(self, filename=None):
-        """Export all metrics to a CSV file"""
         if not self.metrics:
             return False, "No metrics to export"
         
@@ -59,7 +56,6 @@ class PerformanceTracker:
             return False, str(e)
     
     def get_summary(self):
-        """Get a summary of all tracked metrics"""
         if not self.metrics:
             return "No metrics recorded yet."
         
@@ -79,5 +75,4 @@ class PerformanceTracker:
         return summary
     
     def clear_metrics(self):
-        """Clear all recorded metrics"""
         self.metrics = []
