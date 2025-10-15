@@ -6,7 +6,7 @@ import time
 from ascii import muzan,logo,clear
 from tqdm import tqdm
 from performance_tracker import PerformanceTracker
-from castle_export import export_castle_to_csv, import_castle_from_csv
+from castle_export import export_castle_to_csv
 
 clear()
 logo()
@@ -35,8 +35,7 @@ def help():
     print("3 Remove demon")
     print("4 search demon by room number")
     print("5 Export castle data to CSV")
-    print("6 Export performance metrics to CSV")
-    print("7 View performance summary")
+    print("6 View performance summary")
     print("\nHelp if you forget the key")
     print("quit if you want to exit program (all data would be lost)\n")
 
@@ -51,8 +50,6 @@ while(1):
     try:
         helped = False
         if key == '1':
-            tracking = tracker.start_tracking("Show all demons")
-            
             logo()
             print("\n==== Fetching data ====\n")
             lst = castle.get_all()
@@ -63,9 +60,6 @@ while(1):
             print("\nAll demons in this castle are :\n\n")
             for demon in lst:
                 print(f"Room: {demon.num}           Demon's ID : {demon.demon}")
-
-            metric = tracker.end_tracking(tracking)
-            print(f"\n[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
             
             tmp = input("\nPress enter to continue : ")
             clear()
@@ -203,8 +197,6 @@ while(1):
 
 
         elif key=='3':
-            tracking = tracker.start_tracking("Remove demon")
-            
             logo()
             n = int(input("Enter room number to be remove : "))
             removed = castle.removeRoom(n)
@@ -213,9 +205,6 @@ while(1):
                 print(f"Success fully remove room {removed.num}. The demon inside is {removed.demon}")
             else:
                 print("Error : Room not found!!")
-
-            metric = tracker.end_tracking(tracking)
-            print(f"[Performance] Time: {metric['execution_time']}s | RAM Change: {metric['ram_change_mb']:+.2f}MB")
             
             cont = input("\nEnter to continue  : ")
             clear()
@@ -239,8 +228,6 @@ while(1):
             clear()
 
         elif key=='5':
-            tracking = tracker.start_tracking("Export castle to CSV")
-            
             logo()
             success, result = export_castle_to_csv(castle)
             
@@ -251,26 +238,10 @@ while(1):
             else:
                 print(f"\n✗ Export failed: {result}")
             
-            metric = tracker.end_tracking(tracking)
-            print(f"[Performance] Time: {metric['execution_time']}s")
-            
             cont = input("\nPress enter to continue : ")
             clear()
         
         elif key=='6':
-            logo()
-            success, result = tracker.export_to_csv()
-            
-            if success:
-                print(f"\n✓ Performance metrics exported successfully!")
-                print(f"File saved as: {result}")
-            else:
-                print(f"\n✗ Export failed: {result}")
-            
-            cont = input("\nPress enter to continue : ")
-            clear()
-        
-        elif key=='7':
             logo()
             print(tracker.get_summary())
             

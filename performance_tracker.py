@@ -10,7 +10,6 @@ class PerformanceTracker:
         self.metrics = []
         
     def start_tracking(self, command_name):
-        """Start tracking performance for a command"""
         return {
             'command': command_name,
             'start_time': time.time(),
@@ -19,7 +18,6 @@ class PerformanceTracker:
         }
     
     def end_tracking(self, tracking_data):
-        """End tracking and record metrics"""
         end_time = time.time()
         end_ram = self.process.memory_info().rss / 1024 / 1024  # Convert to MB
         
@@ -35,7 +33,7 @@ class PerformanceTracker:
         
         self.metrics.append(metric)
         return metric
-       
+    
     def get_summary(self):
         """Get a summary of all tracked metrics"""
         if not self.metrics:
