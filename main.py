@@ -69,6 +69,7 @@ while(1):
             metric = tracker.end_tracking(tracking)
             print(f"\n[Performance] Time: {metric['execution_time']}s | RAM: {metric['end_ram_mb']}MB")
             
+            print(f"Total Demons : {castle.size}")
             tmp = input("\nPress enter to continue : ")
             clear()
 
@@ -146,8 +147,8 @@ while(1):
                         if j<n[i]:  
                             castle.insertRoom((castle.tran.full_inverse((j*(bus+1))+i+1),generate_demon_id(lot,3,j+1,i+1)))
 
-                    lot+=1
-                    print("\nAdding done!!")
+                lot+=1
+                print("\nAdding done!!")
                 cont = input("\nEnter to continue  : ")
                 clear()
 
@@ -207,7 +208,7 @@ while(1):
                 if castle.search(n):
                     print("This room is occupied !!!!")
                 else:
-                    castle.insertRoom((n,generate_demon_id(lot,5,1)))
+                    castle.insertRoom((castle.tran.full_inverse(n),generate_demon_id(lot,5,1)))
 
                 lot+=1
                 metric = tracker.end_tracking(tracking)
@@ -217,7 +218,7 @@ while(1):
                 clear()
             else:
                 logo()
-                print("!!! Wrong command !!!")
+                print("!!! Wrong command !!!") 
                 cont = input("\nEnter to continue  : ")
                 clear()
 
